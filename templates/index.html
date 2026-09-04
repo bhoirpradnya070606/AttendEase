@@ -1,0 +1,968 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AttendEase | Student Attendance</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🎓
+            </div>
+
+            <div>
+                <h2>AttendEase</h2>
+                <p>Student Portal</p>
+            </div>
+
+        </div>
+
+
+        <nav>
+
+            <a href="#dashboard" class="nav-item active">
+                <span>🏠</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#calculator" class="nav-item">
+                <span>🧮</span>
+                <span>Calculator</span>
+            </a>
+
+            <a href="#subjects" class="nav-item">
+                <span>📚</span>
+                <span>Subjects</span>
+            </a>
+
+            <a href="#records" class="nav-item">
+                <span>📋</span>
+                <span>Records</span>
+            </a>
+
+            <a href="#about" class="nav-item">
+                <span>ℹ️</span>
+                <span>About</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="mini-profile">
+
+                <div class="avatar">
+                    P
+                </div>
+
+                <div>
+                    <strong>Pradnya</strong>
+                    <span>Computer Science</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="small-text">
+                    Student Dashboard
+                </p>
+
+                <h1>
+                    Good Morning, Pradnya! 👋
+                </h1>
+
+            </div>
+
+
+            <div class="top-profile">
+
+                <div class="avatar large">
+                    P
+                </div>
+
+                <div>
+
+                    <strong>
+                        Pradnya
+                    </strong>
+
+                    <span>
+                        TY Computer Science
+                    </span>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             DASHBOARD
+        ========================== -->
+
+        <section id="dashboard">
+
+
+            <!-- Welcome Card -->
+
+            <div class="welcome-card">
+
+                <div>
+
+                    <span class="badge">
+                        Attendance Overview
+                    </span>
+
+                    <h2>
+                        Keep your attendance
+                        <span>above 75%</span>
+                    </h2>
+
+                    <p>
+                        Track your classes and maintain your attendance
+                        easily from one place.
+                    </p>
+
+                </div>
+
+
+                <div class="welcome-icon">
+                    📊
+                </div>
+
+            </div>
+
+
+            <!-- Statistics -->
+
+            <div class="stats-grid">
+
+
+                <!-- Overall Attendance -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">
+                        %
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Overall Attendance
+                        </p>
+
+                        <h2>
+                            {{ overall_percentage }}%
+                        </h2>
+
+
+                        {% if overall_percentage >= 75 %}
+
+                            <span class="status good">
+                                ● Good Attendance
+                            </span>
+
+                        {% elif overall_percentage >= 60 %}
+
+                            <span class="status warning">
+                                ● Warning
+                            </span>
+
+                        {% else %}
+
+                            <span class="status danger">
+                                ● Low Attendance
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- Total Classes -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+                        📚
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Total Classes
+                        </p>
+
+                        <h2>
+                            {{ total_classes }}
+                        </h2>
+
+                        <span class="status neutral">
+                            All subjects
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Attended Classes -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Classes Attended
+                        </p>
+
+                        <h2>
+                            {{ attended_classes }}
+                        </h2>
+
+                        <span class="status good">
+                            Present
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Absent Classes -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        !
+                    </div>
+
+                    <div>
+
+                        <p>
+                            Classes Absent
+                        </p>
+
+                        <h2>
+                            {{ absent_classes }}
+                        </h2>
+
+                        <span class="status warning">
+                            Absent
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             SUBJECT-WISE ATTENDANCE
+        ========================== -->
+
+        <section id="subjects" class="content-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-text">
+                        Performance
+                    </p>
+
+                    <h2>
+                        Subject-wise Attendance
+                    </h2>
+
+                </div>
+
+
+                <a href="#calculator"
+                   class="primary-button">
+
+                    + Add Attendance
+
+                </a>
+
+            </div>
+
+
+            <div class="subject-card">
+
+
+                {% if records %}
+
+
+                    {% for record in records[:6] %}
+
+                    <div class="subject-row">
+
+
+                        <div class="subject-info">
+
+                            <div class="subject-icon">
+                                📖
+                            </div>
+
+                            <div>
+
+                                <strong>
+                                    {{ record.subject }}
+                                </strong>
+
+                                <span>
+                                    {{ record.attended_classes }}
+                                    /
+                                    {{ record.total_classes }}
+                                    classes attended
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="progress-area">
+
+                            <div class="progress-track">
+
+                                <div
+                                    class="
+                                    progress-fill
+
+                                    {% if record.percentage >= 75 %}
+                                        good-progress
+
+                                    {% elif record.percentage >= 60 %}
+                                        warning-progress
+
+                                    {% else %}
+                                        danger-progress
+
+                                    {% endif %}
+                                    "
+                                    style="--attendance: {{ record.percentage }}%;">
+
+                                </div>
+
+                            </div>
+
+
+                            <strong>
+                                {{ record.percentage }}%
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="empty-state">
+
+                        No attendance records available.
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             ATTENDANCE CALCULATOR
+        ========================== -->
+
+        <section id="calculator"
+                 class="content-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-text">
+                        Quick Tool
+                    </p>
+
+                    <h2>
+                        Attendance Calculator
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="calculator-layout">
+
+
+                <!-- FORM -->
+
+                <div class="form-card">
+
+                    <form action="/add"
+                          method="POST">
+
+
+                        <!-- Student Name -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Student Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="student_name"
+                                value="Pradnya"
+                                required>
+
+                        </div>
+
+
+
+                        <!-- Subject -->
+
+                        <div class="form-group">
+
+                            <label>
+                                Subject
+                            </label>
+
+                            <select
+                                name="subject"
+                                required>
+
+                                <option value="">
+                                    Select Subject
+                                </option>
+
+                                <option value="Numerical Methods">
+                                    Numerical Methods
+                                </option>
+
+                                <option value="Artificial Intelligence">
+                                    Artificial Intelligence
+                                </option>
+
+                                <option value="Computer Networks">
+                                    Computer Networks
+                                </option>
+
+                                <option value="Software Engineering">
+                                    Software Engineering
+                                </option>
+
+                                <option value="Data Structures">
+                                    Data Structures
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- Class Inputs -->
+
+                        <div class="input-row">
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Total Classes
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="totalClasses"
+                                    name="total_classes"
+                                    min="1"
+                                    placeholder="40"
+                                    required>
+
+                            </div>
+
+
+
+                            <div class="form-group">
+
+                                <label>
+                                    Attended Classes
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="attendedClasses"
+                                    name="attended_classes"
+                                    min="0"
+                                    placeholder="36"
+                                    required>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <button
+                            type="submit"
+                            class="calculate-button">
+
+                            Save Attendance
+
+                        </button>
+
+
+                    </form>
+
+                </div>
+
+
+
+                <!-- LIVE PREVIEW -->
+
+                <div class="preview-card">
+
+                    <p class="small-text">
+                        Live Preview
+                    </p>
+
+
+                    <h3 id="previewSubject">
+                        Attendance
+                    </h3>
+
+
+
+                    <div class="circle-progress">
+
+                        <div class="circle-inner">
+
+                            <strong id="previewPercentage">
+                                0%
+                            </strong>
+
+                            <span>
+                                Attendance
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div
+                        id="previewMessage"
+                        class="preview-message">
+
+                        Enter your class details
+                        to calculate attendance.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             ATTENDANCE RECORDS
+        ========================== -->
+
+        <section id="records"
+                 class="content-section">
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-text">
+                        Database
+                    </p>
+
+                    <h2>
+                        Recent Attendance Records
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="table-container">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Student
+                            </th>
+
+                            <th>
+                                Subject
+                            </th>
+
+                            <th>
+                                Total Classes
+                            </th>
+
+                            <th>
+                                Attended
+                            </th>
+
+                            <th>
+                                Percentage
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        {% if records %}
+
+
+                            {% for record in records %}
+
+                            <tr>
+
+
+                                <!-- Student -->
+
+                                <td>
+
+                                    <div class="student-cell">
+
+                                        <div class="small-avatar">
+
+                                            {{ record.student_name[0] }}
+
+                                        </div>
+
+                                        {{ record.student_name }}
+
+                                    </div>
+
+                                </td>
+
+
+
+                                <!-- Subject -->
+
+                                <td>
+                                    {{ record.subject }}
+                                </td>
+
+
+
+                                <!-- Total -->
+
+                                <td>
+                                    {{ record.total_classes }}
+                                </td>
+
+
+
+                                <!-- Attended -->
+
+                                <td>
+                                    {{ record.attended_classes }}
+                                </td>
+
+
+
+                                <!-- Percentage -->
+
+                                <td>
+
+                                    <strong>
+                                        {{ record.percentage }}%
+                                    </strong>
+
+                                </td>
+
+
+
+                                <!-- Status -->
+
+                                <td>
+
+
+                                    {% if record.percentage >= 75 %}
+
+                                        <span
+                                            class="table-status good-bg">
+
+                                            Good
+
+                                        </span>
+
+
+                                    {% elif record.percentage >= 60 %}
+
+                                        <span
+                                            class="table-status warning-bg">
+
+                                            Warning
+
+                                        </span>
+
+
+                                    {% else %}
+
+                                        <span
+                                            class="table-status danger-bg">
+
+                                            Low
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+
+                                <!-- Delete -->
+
+                                <td>
+
+                                    <form
+                                        action="/delete/{{ record.id }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Delete this record?');">
+
+                                        <button
+                                            class="delete-button"
+                                            type="submit">
+
+                                            Delete
+
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+                            <tr>
+
+                                <td
+                                    colspan="7"
+                                    style="text-align:center;">
+
+                                    No attendance records found.
+
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             ABOUT PROJECT
+        ========================== -->
+
+        <section id="about"
+                 class="content-section">
+
+
+            <div class="about-card">
+
+
+                <div class="about-icon">
+                    🎓
+                </div>
+
+
+                <div>
+
+
+                    <p class="small-text">
+                        About Project
+                    </p>
+
+
+                    <h2>
+                        Student Attendance Management System
+                    </h2>
+
+
+                    <p>
+
+                        AttendEase is a web-based student attendance
+                        management system designed to calculate,
+                        store and monitor student attendance records.
+
+                    </p>
+
+
+
+                    <div class="technology-tags">
+
+                        <span>
+                            HTML
+                        </span>
+
+                        <span>
+                            CSS
+                        </span>
+
+                        <span>
+                            JavaScript
+                        </span>
+
+                        <span>
+                            Python Flask
+                        </span>
+
+                        <span>
+                            MySQL
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+
+        <footer>
+
+            <p>
+                © 2026 AttendEase |
+                Student Attendance Management System
+            </p>
+
+        </footer>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- JavaScript -->
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
+```
+
